@@ -1,6 +1,9 @@
 document.addEventListener("DOMContentLoaded", function(event) {
 
 let employees = [];
+let currentTarget = '';
+
+
 
   $('.main-container').html('');
   $.ajax({
@@ -29,49 +32,45 @@ let employees = [];
           employeeHTML += '</div></a>'
           employeeHTML += '<div id="employees'+i+'" class="modal">'
 
-          modal(data.results[i], i);
+
+         modal(employees[i], i);
 
           employeeHTML += '</div>'
 
           $('.main-container').html(employeeHTML);
         }); // end each
 
+        var modalHTML = '';
 
-
-
-        function modal(drm, i) {
-          employeeHTML += '<div class="modal-style">'
+        function modal(target, i) {
+          currentTarget = data.results.indexOf(target);
+          modalHTML += '<div class="modal-style">'
 //          employeeHTML += '<input id="slide-'+i+'-trigger" type="radio" name="slides">'
   //        employeeHTML += '<section class="slide slide-'+i+'">'
-          employeeHTML += '<img src="'+drm.picture.large+'" alt="'+drm.name.first+'" class="modal-pic">'
-          employeeHTML += '<h2 >'+drm.name.first+' '+drm.name.last+'</h2>'
-          employeeHTML += '<p class="lowercase">'+drm.email+'</p>'
-          employeeHTML += '<p>'+drm.location.city+'</p>'
-          employeeHTML += '<hr>'
-          employeeHTML += '<p>'+drm.phone+'</p>'
-          employeeHTML += '<p>'+drm.location.street+', '+drm.location.state+' '+drm.location.postcode+'</p>'
-          employeeHTML += '<div class="dob-middle"><p class="dob">'+'Birthday: '+drm.dob+'</p></div>'
-          employeeHTML += '<div class="modal-nav">'
-          employeeHTML += '<button id="prev">previous</button>'
-          employeeHTML += '<button id="next">next</button>'
-          employeeHTML += '</div>'
-          employeeHTML += '</div>'
+          modalHTML += '<img src="'+target.picture.large+'" alt="'+target.name.first+'" class="modal-pic">'
+          modalHTML += '<h2 >'+target.name.first+' '+target.name.last+'</h2>'
+          modalHTML += '<p class="lowercase">'+target.email+'</p>'
+          modalHTML += '<p>'+target.location.city+'</p>'
+          modalHTML += '<hr>'
+          modalHTML += '<p>'+target.phone+'</p>'
+          modalHTML += '<p>'+target.location.street+', '+target.location.state+' '+target.location.postcode+'</p>'
+          modalHTML += '<div class="dob-middle"><p class="dob">'+'Birthday: '+target.dob+'</p></div>'
+          modalHTML += '<div class="modal-nav">'
+          modalHTML += '<button id="prev">previous</button>'
+          modalHTML += '<button id="next">next</button>'
+          modalHTML += '</div>'
+          modalHTML += '</div>'
+
+          $('#employees'+i+'').html(modalHTML);
 
 
+          $("#next").click(function() {
+              modal(currentTarget[i + 1], i + 1);
+          });
 
-          $(document).on('click ', '#prev', function(e) {
-            if (i === 0) {
-                return modal(dr[dr.length - 1]);
-            }
-                return modal(data.results[i - 1]);
-            });  // End
-
-          $(document).on('click ', '#next', function(e) {
-              if (i === dr.length - 1) {
-                return modal(data.results[0]);
-            }
-                return modal(data.results[i+ 1]);
-        }); // End
+          $("#prev").click(function() {
+               modal(currentTarget[i - 1], i - 1);
+          });
 
 
 
