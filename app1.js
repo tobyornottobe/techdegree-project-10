@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function(event) {
 
-
+let employees = [];
 let currentTarget = '';
 
 
@@ -11,46 +11,37 @@ let currentTarget = '';
     dataType: 'json',
     success: function(data) {
       console.log(data);
-      let employee = data.results;
+      let dr = data.results;
 
 
       var employeeHTML = '';
-      if (employee.length > 0) {
-
+      if (data.results.length > 0) {
 
         //$.each(array, function(index,value) {};)
-        $.each(employee, function(i, employee) {
+        $.each(data.results,function(i, dr) {
 
-          employeeHTML += '<a class="employee-card-a" href="#employees'+i+'" data-caption="'+employee.name.first+employee.name.last+'" rel="modal:open">'
+          employeeHTML += '<a class="employee-card-a" data-key="'+i+ '" data-caption="'+dr.name.first+dr.name.last+'" >'
           employeeHTML += '<div class="employee-card">'
           employeeHTML +=   '<div class="employee-card-left">'
-          employeeHTML +=     '<img src="'+employee.picture.large+'" alt="'+employee.name.first+'">'
+          employeeHTML +=     '<img src="'+dr.picture.large+'" alt="'+dr.name.first+'">'
           employeeHTML +=   '</div>'
           employeeHTML +=   '<div class="employee-card-right">'
-          employeeHTML +=     '<h2>'+employee.name.first+' '+employee.name.last+'</h2>'
-          employeeHTML +=     '<p class="lowercase">'+employee.email+'</p>'
-          employeeHTML +=     '<p>'+employee.location.city+'</p>'
+          employeeHTML +=     '<h2>'+dr.name.first+' '+dr.name.last+'</h2>'
+          employeeHTML +=     '<p class="lowercase">'+dr.email+'</p>'
+          employeeHTML +=     '<p>'+dr.location.city+'</p>'
           employeeHTML +=   '</div>'
           employeeHTML += '</div></a>'
-          employeeHTML += '<div id="employees'+i+'" class="modal">'
-
-
+          employeeHTML += '<div id="employees'+i+'">'
           employeeHTML += '</div>'
 
           $('.main-container').html(employeeHTML);
         }); // end each
 
-
-
-        const profiles = $(".employee-card");
-        for (let i = 0; i < profiles.length; i++) {
-        profiles[i].onclick = function () {
+        var modalHTML = '';
 
         function modal(target, i) {
-          currentTarget = employee.indexOf(target);
+          currentTarget = data.results.indexOf(target);
           modalHTML += '<div class="modal-style">'
-        //          employeeHTML += '<input id="slide-'+i+'-trigger" type="radio" name="slides">'
-        //        employeeHTML += '<section class="slide slide-'+i+'">'
           modalHTML += '<img src="'+target.picture.large+'" alt="'+target.name.first+'" class="modal-pic">'
           modalHTML += '<h2 >'+target.name.first+' '+target.name.last+'</h2>'
           modalHTML += '<p class="lowercase">'+target.email+'</p>'
@@ -67,63 +58,37 @@ let currentTarget = '';
 
           $('.modal').html(modalHTML);
           $('.modal').show();
+        } // End of modal function
 
-          };
-        };
-      } //end for loop
+        const employeeCards = document.querySelectorAll('.employee-card');
 
-
-
-          $(".employee-card").click(function() {
-
-
-          $("#next").click(function() {
-              modal(currentTarget[i + 1], i + 1);
-          });
-
-          $("#prev").click(function() {
-               modal(currentTarget[i - 1], i - 1);
-          });
-
+        employeeCards.forEach( employee => {
+          employee.addEventListener('click', () => {
+            modal(dr[employee.parentNode.getAttribute('data-key')]);
 
           });
-            //      employeeHTML += '<i data-feather="chevron-left" id="prev"></i>'
-            //      employeeHTML += '<i data-feather="chevron-right" id="next"></i>'
-              //      employeeHTML += '</section>'
-        }
+        });
 
+        $("#next").click(function() {
+          modal(dr[currentTarget + 1], i + 1);
+        });
 
-
-
+        $("#prev").click(function() {
+          modal(dr[currentTarget - 1], i - 1);
+        });
+      }
     }
-
-
-
-
-
-
-
-
-
   }); // end ajax
 
-
-
-
-$( "#search" ).keyup(function() {
+  $( "#search" ).keyup(function() {
     var userInput = $(this).val().toLowerCase();
 
     $('.employee-card-a').each(function(){
-
         if ($(this).filter('[data-caption *= ' + userInput + ']').length > 0 || userInput.length < 1) {
-            $(this).show();
+          $(this).show();
         } else {
-            $(this).hide();
+          $(this).hide();
         }
     });
   });
-
-
-
-
 }); //end DOM
