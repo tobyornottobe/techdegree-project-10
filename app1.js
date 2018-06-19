@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function(event) {
 
-let employees = [];
+let employee = [];
 let currentTarget = '';
 
 
@@ -20,7 +20,7 @@ let currentTarget = '';
         //$.each(array, function(index,value) {};)
         $.each(data.results,function(i, dr) {
 
-          employeeHTML += '<a class="employee-card-a" data-key="'+i+ '" data-caption="'+dr.name.first+dr.name.last+'" >'
+          employeeHTML += '<a class="employee-card-a" data-key="'+i+'" data-caption="'+dr.name.first+dr.name.last+'" >'
           employeeHTML += '<div class="employee-card">'
           employeeHTML +=   '<div class="employee-card-left">'
           employeeHTML +=     '<img src="'+dr.picture.large+'" alt="'+dr.name.first+'">'
@@ -43,7 +43,7 @@ let currentTarget = '';
           currentTarget = data.results.indexOf(target);
           modalHTML += '<div class="modal-style">'
           modalHTML += '<img src="'+target.picture.large+'" alt="'+target.name.first+'" class="modal-pic">'
-          modalHTML += '<h2 >'+target.name.first+' '+target.name.last+'</h2>'
+          modalHTML += '<h2>'+target.name.first+' '+target.name.last+'</h2>'
           modalHTML += '<p class="lowercase">'+target.email+'</p>'
           modalHTML += '<p>'+target.location.city+'</p>'
           modalHTML += '<hr>'
@@ -56,8 +56,8 @@ let currentTarget = '';
           modalHTML += '</div>'
           modalHTML += '</div>'
 
-          $('.modal').html(modalHTML);
-          $('.modal').show();
+          $('.modal').html(modalHTML).modal();
+
         } // End of modal function
 
         const employeeCards = document.querySelectorAll('.employee-card');
@@ -70,12 +70,35 @@ let currentTarget = '';
         });
 
         $("#next").click(function() {
-          modal(dr[currentTarget + 1], i + 1);
+          console.log("next");
+          modal(dr[employee.parentNode.getAttribute('data-key') + 1], employee.parentNode.getAttribute('data-key') + 1);
+
         });
 
         $("#prev").click(function() {
-          modal(dr[currentTarget - 1], i - 1);
+          modal(dr[employee.parentNode.getAttribute('data-key') - 1], employee.parentNode.getAttribute('data-key') - 1);
+          console.log("prev");
         });
+
+
+        $('.close-modal').hide();
+
+
+
+
+/*
+        if (i >= 1 && i <= employees.length) {
+          $("#prev").remove('disabled');
+        } else {
+          $("#prev").addClass('disabled');
+        }
+
+        if (i + 1 === employees.length) {
+          $("#next").addClass('disabled');
+        } else {
+          $("#next").remove('disabled');
+        }
+*/
       }
     }
   }); // end ajax

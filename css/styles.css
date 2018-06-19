@@ -119,6 +119,10 @@ button {
 
 /*MODAL*/
 
+.disabled {
+  display: none;
+}
+
 .modal-style {
   align-items: center;
   text-align: center;
