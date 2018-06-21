@@ -39,7 +39,9 @@ let currentTarget = '';
 
         var modalHTML = '';
 
+
         function modal(target, i) {
+
           currentTarget = data.results.indexOf(target);
           modalHTML += '<div class="modal-style">'
           modalHTML += '<img src="'+target.picture.large+'" alt="'+target.name.first+'" class="modal-pic">'
@@ -49,7 +51,7 @@ let currentTarget = '';
           modalHTML += '<hr>'
           modalHTML += '<p>'+target.phone+'</p>'
           modalHTML += '<p>'+target.location.street+', '+target.location.state+' '+target.location.postcode+'</p>'
-          modalHTML += '<div class="dob-middle"><p class="dob">'+'Birthday: '+target.dob+'</p></div>'
+          modalHTML += '<div class="dob-middle"><p class="dob">'+'Birthday: '+new Date(target.dob.date).toLocaleDateString()+'</p></div>'
           modalHTML += '<div class="modal-nav">'
           modalHTML += '<button id="prev">previous</button>'
           modalHTML += '<button id="next">next</button>'
@@ -57,6 +59,8 @@ let currentTarget = '';
           modalHTML += '</div>'
 
           $('.modal').html(modalHTML).modal();
+          modalHTML = "";
+
 
         } // End of modal function
 
@@ -66,22 +70,55 @@ let currentTarget = '';
           employee.addEventListener('click', () => {
             modal(dr[employee.parentNode.getAttribute('data-key')]);
 
+            $("#next").click(function() {
+              modalHTML = "";
+              modal(dr[employee.getAttribute('data-key') + 1], employee.getAttribute('data-key') + 1);
+              console.log('data-key');
+            });
+
+            $("#prev").click(function() {
+              modalHTML = "";
+              modal(dr[employee.parentNode.getAttribute('data-key') - 1], employee.parentNode.getAttribute('data-key') - 1);
+              console.log('data-key');
+            });
+
+            $('.close-modal').click(function() {
+            });
+
           });
         });
 
-        $("#next").click(function() {
-          console.log("next");
-          modal(dr[employee.parentNode.getAttribute('data-key') + 1], employee.parentNode.getAttribute('data-key') + 1);
+/*
+        const employeeCards = document.querySelectorAll('.employee-card');
+        const next = document.querySelectorAll('#next');
+        const prev = document.querySelectorAll('#prev');
 
+        employeeCards.forEach( employee => {
+          employee.addEventListener('click', () => {
+            modal(dr[employee.parentNode.getAttribute('data-key')]);
+          });
         });
 
-        $("#prev").click(function() {
-          modal(dr[employee.parentNode.getAttribute('data-key') - 1], employee.parentNode.getAttribute('data-key') - 1);
-          console.log("prev");
+        next.forEach( employee => {
+          employee.addEventListener('click', () => {
+            modal(dr[employee.getAttribute('data-key') + 1], employee.getAttribute('data-key') + 1);
+          });
         });
 
+        prev.forEach( employee => {
+          employee.addEventListener('click', () => {
+            modal(dr[employee.parentNode.getAttribute('data-key') - 1], employee.parentNode.getAttribute('data-key') - 1);
+          });
+        });
+*/
 
-        $('.close-modal').hide();
+
+
+
+
+
+
+
 
 
 
