@@ -13,11 +13,11 @@ let currentTarget = '';
       console.log(data);
       let dr = data.results;
 
+//main employee overview
 
       var employeeHTML = '';
       if (data.results.length > 0) {
 
-        //$.each(array, function(index,value) {};)
         $.each(data.results,function(i, dr) {
 
           employeeHTML += '<a class="employee-card-a" data-key="'+i+'" data-caption="'+dr.name.first+dr.name.last+'" >'
@@ -39,6 +39,7 @@ let currentTarget = '';
 
         var modalHTML = '';
 
+//employee modal view
 
         function modal(target, i) {
 
@@ -61,80 +62,49 @@ let currentTarget = '';
           $('.modal').html(modalHTML).modal();
           modalHTML = "";
 
+//previous and next buttons
+
+          $("#next").click(function() {
+            modalHTML = "";
+            modal(dr[currentTarget + 1]);
+          });
+
+          $("#prev").click(function() {
+            modalHTML = "";
+            modal(dr[currentTarget - 1]);
+          });
+
+          if (currentTarget === 0) {
+            $("#prev").addClass('disabled');
+          } else {
+            $("#prev").remove('disabled');
+          }
+
+          if (currentTarget === 14) {
+            $("#next").addClass('disabled');
+          } else {
+            $("#next").remove('disabled');
+          }
+
 
         } // End of modal function
 
+//event listener
+
         const employeeCards = document.querySelectorAll('.employee-card');
 
         employeeCards.forEach( employee => {
           employee.addEventListener('click', () => {
             modal(dr[employee.parentNode.getAttribute('data-key')]);
 
-            $("#next").click(function() {
-              modalHTML = "";
-              modal(dr[employee.getAttribute('data-key') + 1], employee.getAttribute('data-key') + 1);
-              console.log('data-key');
-            });
-
-            $("#prev").click(function() {
-              modalHTML = "";
-              modal(dr[employee.parentNode.getAttribute('data-key') - 1], employee.parentNode.getAttribute('data-key') - 1);
-              console.log('data-key');
-            });
-
-            $('.close-modal').click(function() {
-            });
-
           });
         });
-
-/*
-        const employeeCards = document.querySelectorAll('.employee-card');
-        const next = document.querySelectorAll('#next');
-        const prev = document.querySelectorAll('#prev');
-
-        employeeCards.forEach( employee => {
-          employee.addEventListener('click', () => {
-            modal(dr[employee.parentNode.getAttribute('data-key')]);
-          });
-        });
-
-        next.forEach( employee => {
-          employee.addEventListener('click', () => {
-            modal(dr[employee.getAttribute('data-key') + 1], employee.getAttribute('data-key') + 1);
-          });
-        });
-
-        prev.forEach( employee => {
-          employee.addEventListener('click', () => {
-            modal(dr[employee.parentNode.getAttribute('data-key') - 1], employee.parentNode.getAttribute('data-key') - 1);
-          });
-        });
-*/
-
-
-
-
-
-
-
-
 
 
 
 
 /*
-        if (i >= 1 && i <= employees.length) {
-          $("#prev").remove('disabled');
-        } else {
-          $("#prev").addClass('disabled');
-        }
 
-        if (i + 1 === employees.length) {
-          $("#next").addClass('disabled');
-        } else {
-          $("#next").remove('disabled');
-        }
 */
       }
     }
